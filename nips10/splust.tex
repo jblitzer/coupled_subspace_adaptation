@@ -1,0 +1,37 @@
+\section{Estimating a Target Predictor from Source and Target Labeled Data}
+
+One procedure for estimating a predictor from source and target data
+is to first estimate a source predictor and then to estimate a target
+predictor on only $\ProjPCAt(I - \ProjPCAst)$.  This allows us to
+achieve unbiased convergence to the true predictor $\beta$.
+
+\begin{theorem}\label{thm:generalization} (Generalization)
+Suppose Assumptions~\ref{ass:same_task} and ~\ref{ass:dim_red}
+hold. Let $\Covt^{s,t} = \ProjPCAst\Covt\ProjPCAst'$, $\Covt^{\bot} =
+\left(I - \ProjPCAst\right)'\Covt\left(I - \ProjPCAst\right)$, and
+$\beta^{\bot}_{t} = \Projt(I - \ProjPCAst)$.  Also assume that:
+$\Covs$ is invertible; and the conditional variance of $Y$ is bounded
+by $1$, i.e. with probability one, $\mathrm{Var}(Y|X, D=s) \leq 1$.
+
+For the estimator $\hatbeta = \hatbetas + \hat{\beta}^{\bot}_{t}$, we have
+\[
+\Expct\left[\mathrm{Regret}_t(\hatbeta)\right]
+\leq \frac{\mathrm{dim}\left(\Projt(I-\ProjPCAst)\right)}{n_{t}}
+~~+~~ \frac{\mathrm{trace}(\Covs^{-1}\Covt^{s,t})}{n_{s}}
+\]
+where $n_{s}$ is the source training set size and $n_{t}$ is the target
+training set size.
+\end{theorem} 
+\begin{proof}
+\[
+\begin{array}{ll}
+\Expct_{\hat{\beta}^{\bot}_{t}\sim T} \Expct_{\hatbetas \sim S} \left[ \textrm{Regret}_{t}\left(\hat{\beta}\right)\right] & =~~\Expct_{\hat{\beta}^{\bot}_{t}\sim T}\Expct_{\hat{\beta}\sim S} \left[ \Expct_{X\sim T}\left(\hat{\beta}^{\bot'}_{t}X + \hatbetas'X - \beta'X\right)^{2} \right] \\
+& \hspace{-1.5in} =~~\Expct_{\hat{\beta}^{\bot}_{t}\sim T} \Expct_{\hatbetas\sim S} \left[ \Expct_{X\sim T}\left((\hat{\beta}^{\bot}_{t} + \hatbetas - \beta)'(\ProjPCAst X + (I-\ProjPCAst) X)(\ProjPCAst X + (I-\ProjPCAst) X)'(\hat{\beta}^{\bot}_{t} + \hatbetas - \beta)'\right) \right] \\
+& \hspace{-1.5in} =~~\Expct_{\hat{\beta}^{\bot}_{t}\sim T}\Expct_{\hat\betas\sim S} \left[ (\hatbetas + \hat{\beta}^{\bot}_{t} - \beta)'\Covt^{s,t}(\hatbetas + \hat{\beta}^{\bot}_{t} - \beta) \right] + \Expct_{\hat{\beta}^{\bot}_{t}\sim T}\Expct_{\hat\betas \sim S} \left[ (\hatbetas + \hat{\beta}^{\bot}_{t} - \beta)'\Covt^{\bot}(\hat{\beta}^{\bot}_{t} + \hatbetas - \beta) \right] \\
+& \hspace{-1.5in} =~~ \Expct_{\hat{\beta}^{\bot}_{t}\sim T} \left[ (\hat{\beta}^{\bot}_{t} - \beta)'\Covt^{s,t}(\hat{\beta}^{\bot}_{t} - \beta) \right] + \Expct_{\hatbetas\sim S} \left[ (\hatbetas - \beta)'\Covt^{s,t}(\hatbetas - \beta) \right]\\
+& \hspace{-1.5in} =~~ \frac{\mathrm{dim}\left(\Projt(I-P_{s,t}) \right)}{n_{t}} + \frac{\mathrm{trace}\left[ \Covs^{-1}\Covt^{s,t} \right]}{n_{s}}
+\end{array}
+\]
+\end{proof}
+
+

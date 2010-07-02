@@ -1,0 +1,111 @@
+% File acl-ijcnlp2009.tex
+%
+% Contact  jshin@csie.ncnu.edu.tw
+%%
+%% Based on the style files for EACL-2009 and IJCNLP-2008...
+
+%% Based on the style files for EACL 2006 by 
+%%e.agirre@ehu.es or Sergi.Balari@uab.es
+%% and that of ACL 08 by Joakim Nivre and Noah Smith
+
+\documentclass[11pt]{article}
+\usepackage{acl2010}
+\usepackage{times}
+\usepackage{url}
+\usepackage{CJK}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{latexsym}
+\usepackage{amstext}
+\usepackage{commath}
+\usepackage{mathtools}
+\usepackage{subfigure}
+\usepackage{balance}
+
+\setlength\titlebox{5.8cm}    % You can expand the title box if you
+% really have to
+\newcommand{\eat}[1]{\ignorespaces}
+\DeclareMathOperator*{\esssup}{ess\ sup}
+\DeclareMathOperator*{\argmax}{argmax}
+
+%\newcommand{\argmax}{\operatornamewithlimits{arg\,max}}
+%\newcommand{\argmin}{\operatornamewithlimits{arg\,min}}
+\newcommand{\mc}{\multicolumn}
+
+
+\title{
+%Improving Monolingual Models with Unlabeled Bitexts
+Learning Better Monolingual Models with Unannotated Bilingual Text
+%Learning Bilingual Models for Monolingual Tasks\\
+%Learning Bilingual Models without Annotated Bilingual Corpora
+}
+
+\author{David Burkett$^\dag$~~~~Slav Petrov$^\ddag$~~~~John Blitzer$^\dag$~~~~Dan Klein$^\dag$\\[0.3cm]
+~~~~~~~~~~~~~~~$^\dagger$University of California, Berkeley~~~~~~~~~~~~~~~~~~~~~~~~~~~~~$^\ddag$Google Research~~~~~~~~~ \\
+{\tt \{dburkett,blitzer,klein\}@cs.berkeley.edu}~~~~~{\tt slav@google.com}~~~~~~~~~
+}
+%\author{First Author\\
+%  Affiliation / Address line 1\\
+%  Affiliation / Address line 2\\
+%  {\tt email@domain}  \And
+%  Second Author\\
+%  Affiliation / Address line 1\\
+%  Affiliation / Address line 2\\
+%  {\tt  email@domain}}
+
+\date{}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+\small 
+
+This work shows how to improve state-of-the-art monolingual natural
+language processing models using unannotated bilingual text.  We build
+a multiview learning objective that enforces agreement between
+monolingual and bilingual models.  In our method the first,
+monolingual view consists of supervised predictors learned separately
+for each language.  The second, bilingual view consists of log-linear
+predictors learned over both languages on bilingual text.  Our
+training procedure estimates the parameters of the bilingual model
+using the output of the monolingual model, and we show how to combine
+the two models to account for dependence between views.  For the task
+of named entity recognition, using bilingual predictors increases
+F$_1$ by 16.1\% absolute over a supervised monolingual model, and
+retraining on bilingual predictions increases \emph{monolingual} model
+F$_1$ by 14.6\%.  For syntactic parsing, our bilingual predictor
+increases F$_1$ by 2.1\% absolute, and retraining a monolingual model
+on its output gives an improvement of 2.0\%.\\[0.1cm]
+
+\end{abstract}
+
+\input{intro}
+
+\input{related}
+
+\input{model}
+
+\input{examples}
+
+\input{training}
+
+\input{prediction}
+
+\input{retraining}
+
+\input{ner}
+
+\input{parsing}
+
+\input{combination}
+
+\input{conclusions}
+
+\input{acknowledgements}
+
+\balance
+\bibliographystyle{acl}
+% you bib file should really go here 
+\bibliography{citations}
+
+\end{document}

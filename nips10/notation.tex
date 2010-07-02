@@ -1,0 +1,104 @@
+
+\newcommand{\mc}{\multicolumn}
+
+\newenvironment{proofof}[1]{\begin{proof}[Proof of #1]}{\end{proof}}
+
+\newenvironment{definition}[1][Definition]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+
+\def\thmcolon{\hspace{-.85em} {\bf :} }
+
+\newcommand{\sk}[1]{{\noindent{\textcolor{magenta}{\{{\bf SK:} \em #1\}}}}}
+
+\definecolor{mypurple}{rgb}{.3,0,.5}
+\newcommand{\dpf}[1]{\noindent{\textcolor{mypurple}{\{{\bf dpf:} \em #1\}}}}
+\newcommand{\note}[1]{\noindent{\textcolor{red}{\{{\bf NOTE:} \em #1\}}}}
+
+%formatting
+%\newlength{\IncreaseSpace}
+%\setlength{\IncreaseSpace}{0.1in}
+%\renewcommand{\baselinestretch}{0.95}
+
+\newcommand{\calL}{\mathcal{L}} 
+
+\newcommand{\eps}{{\epsilon}} 
+\newcommand{\argmax}{{\rm argmax}} 
+\newcommand{\argmin}{{\rm argmin}} 
+\newcommand{\Expct}{{\mathbb E}}
+\newcommand{\E}{{\mathbb E}}
+
+\newcommand{\calX}{\mathcal{X}} 
+
+\newcommand{\Xone}{X^{(1)}} 
+\newcommand{\Xtwo}{X^{(2)}}
+\newcommand{\Xonetwo}{(\Xone,\Xtwo)}
+
+\newcommand{\betatrue}{\beta} 
+\newcommand{\betad}{\beta_d} 
+%\newcommand{\betaa}{\beta_a} 
+%\newcommand{\betab}{\beta_b}
+
+\newcommand{\betas}{\beta_s} 
+\newcommand{\betat}{\beta_t} 
+\newcommand{\hatbeta}{\hat{\beta}}
+\newcommand{\hatbetas}{\hat{\beta}_s}
+\newcommand{\hatbetat}{\hat{\beta}_t}
+
+\newcommand{\betaS}{\beta_\mathcal{S}} 
+
+\newcommand{\betabmle}{\hat \betab^{\textrm{MLE}}}
+
+
+\newcommand{\Projd}{\Pi_d}
+%\newcommand{\Proja}{\Pi_a}
+%\newcommand{\Projb}{\Pi_b}
+
+\newcommand{\Projs}{\Pi_s}
+\newcommand{\Projt}{\Pi_t}
+
+\newcommand{\ProjPCAd}{P_d}
+%\newcommand{\ProjPCAa}{P_a}
+%\newcommand{\ProjPCAb}{P_b}
+%\newcommand{\ProjPCAab}{P_{a,b}}
+
+\newcommand{\ProjPCAs}{P_s}
+\newcommand{\ProjPCAt}{P_t}
+\newcommand{\ProjPCAst}{P_{s,t}}
+
+
+\newcommand{\ProjPCASt}{P_{\mathcal{S},t}}
+
+\newcommand{\PCAd}{\mathcal{X}_d}
+%\newcommand{\PCAa}{\mathcal{X}_a}
+%\newcommand{\PCAb}{\mathcal{X}_b}
+
+\newcommand{\PCAs}{\mathcal{X}_s}
+\newcommand{\PCAt}{\mathcal{X}_t}
+\newcommand{\PCAsp}{\mathcal{X}_{s,\perp}}
+\newcommand{\PCAtp}{\mathcal{X}_{t,\perp}}
+
+\newcommand{\PCAshared}{\mathcal{X}_{s,t}}
+\newcommand{\SharedSub}{\mathcal{X}_{\textrm{shared}}}
+
+
+%\newcommand{\Matob}{{{M}}_{a\rightarrow b}}
+%\newcommand{\isoMatob}{\tilde M_{a\rightarrow b}}
+
+\newcommand{\Mstot}{{{M}}_{s\rightarrow t}}
+\newcommand{\isoMstot}{\tilde M_{s\rightarrow t}}
+
+\newcommand{\MStot}{{{M}}_{\mathcal{S}\rightarrow t}}
+
+\newcommand{\Mttos}{M_{t\rightarrow s}}
+\newcommand{\isoMttos}{\tilde M_{t\rightarrow s}}
+
+\newcommand{\Covs}{\Sigma_{s}}
+\newcommand{\Covt}{\Sigma_{t}}
+\newcommand{\Covstot}{\Sigma_{s\rightarrow t}}
+\newcommand{\CovS}{\widehat{\Sigma}_{\mathcal{S}}}
+
+\newcommand{\Mttod}{M_{t\rightarrow d}}
+
+\newcommand{\xst}{{[x]_{s,t}}}
+\newcommand{\xsp}{{[x]_{s,\perp}}}
+\newcommand{\xtp}{{[x]_{t,\perp}}}

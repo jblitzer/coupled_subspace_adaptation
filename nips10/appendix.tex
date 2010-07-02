@@ -1,0 +1,42 @@
+\section{Appendix}
+\label{app:proof}
+
+We now prove Theorem~\ref{thm:gen}.
+
+\begin{proof}
+First, note that our expected regret, when $\Sigma_t = I$ is just:
+\[
+\E \| \hat w_t - \beta_t\|^2
+\]
+We can also choose our coordinate system so that $\xsp$ is
+(statistically) uncorrelated with $\xst$. Then our estimate of $w_t$
+is just $ \Covstot^{-1}\widehat \E [(\Projt X) Y]$, where 
+\[
+\E [(\Projt X) Y] = \frac{1}{n} \sum_{(x,y) \in T} (\Projt x) y
+\]
+where $(x,y)$ are the values in our training set.  Define $\eta_x$ for
+$x$ in our training set by $y_x= \E[Y|x]+\eta_x$, where $y_x$ is the
+value on training sample $x$.  By assumption, $\E \eta_x^2 \leq 1$.  If we rotate to a coordinate system where
+$\Covstot$ is diagonal, then:
+\begin{eqnarray*}
+\E \| \hat w_t - \beta_t\|^2 &=& 
+\E ||\widehat \E [(\Projt X) Y] - \E [(\Projt X)Y]||_{\Covstot^{-2}}^2\\
+& = & \E \left[ \sum_i 
+\frac{(\widehat \E [(\Projt X)_i Y] - \E [(\Projt
+  X)_iY])^2}{\lambda_i^2}
+\right]\\
+& = & \E\left[ \sum_i 
+\frac{ \left(\frac{1}{n} \sum_{x\in T} \eta_x (\Projt x)_i
+  \right)^2}{\lambda_i^2}
+\right]\\
+& = & \E \left[ \sum_i 
+\frac{ \frac{1}{n^2} \sum_{x\in T} \eta_x^2 (\Projt x)_i^2}{\lambda_i^2}
+\right]\\
+& \leq & \sum_i 
+\frac{ \frac{1}{n^2} \sum_{x\in T} (\Projt x)_i^2}{\lambda_i^2}\\
+& =& \frac{1}{n} \sum_i 
+\frac{ 1}{\lambda_i}
+\end{eqnarray*}
+where the third to last step uses independence and the final step uses
+the definition of $\lambda_i$.
+\end{proof}

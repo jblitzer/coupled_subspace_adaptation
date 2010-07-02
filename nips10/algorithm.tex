@@ -1,0 +1,46 @@
+\section{Constructing the Coupled Representation}
+\label{subsec:algorithm}
+
+Our algorithm exploits our assumptions to construct a coupled
+representation so that learning on the source will force learning on
+the novel part of the target subspace, i.e. on $[x]_{t,\perp}$. Once
+we have $\Projs$ and $\Projt$, we fit a linear predictor of the form:
+\begin{equation}~\label{eq:coupled}
+w_t \Projt x  \ + \  w_s \Projs \xsp
+\end{equation}
+where $w_t$ and $w_s$ are the parameters.  
+
+We briefly discuss here how to find the projection operators $\Projs$
+and $\Projt$ and how to identify the portion of the source $\xsp$ that
+is not related to the target.  For finding the projections, we use an
+approximation to canonical correlation analysis
+(CCA)~\cite{hotelling35} for large-scale, high dimensional
+data~\cite{ando07,kakade07,fosterTR}.  CCA is a multiple-view
+dimensionality reduction algorithm, so we begin by breaking up each
+instance into two views.  For example, in the sentiment task we define
+view 1 to be the first half of the document and view 2 to be the
+second half.  Then we search for the reduced dimensional subspace of
+both views that maximizes the correlation between views across all of
+the unlabeled data.  On the target domain, for example, the output of
+this procedure are two orthogonal projections $\Projt^{(1)}$ and
+$\Projt^{(2)}$ which are also orthogonal to each other.  Now we define
+$\Projt = \Projt^{(1)} + \Projt^{(2)}$.
+
+CCA-based representations have been shown to perform well for a
+variety of semi-supervised learning
+tasks~\cite{ando07,kakade07,fosterTR}, but it is not a contribution of
+this work, and a detailed description is beyond our scope.  We
+emphasize, though, that the predictor in Equation~\ref{eq:coupled} is
+agnostic to the specific dimension reduction algorithm.  The only
+requirement is that the resulting representation be predictive as in
+Assumption~\ref{ass:dim_red}.  Indeed, the empirical adaptation work
+that does learn shared representations all use different dimension
+reduction techniques~\cite{blitzer06,guo09,huangyates}.
+
+Finding $\xsp$ exactly can be difficult, since any method for
+discovering the subspace exactly may suffer from stability issues in
+very high dimensional spaces.  We approximate $\xsp$ by simply
+projecting onto just those source-unique features which have no
+support in the large target unlabeled data.  In the sentiment task
+from Figure~\ref{fig:examples}, for example, the
+word \emph{fascinating} is just such a source-unique feature.

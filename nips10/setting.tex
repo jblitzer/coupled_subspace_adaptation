@@ -1,0 +1,98 @@
+
+\section{Setting}
+
+Our input $X\in\calX$ are vectors, where $\calX$ is a vector
+space. Our output $Y\in\mathbb{R}$.  Each domain $D=d$ defines a joint
+distribution $\Pr[X,Y|D=d]$ --- while our theory extends to multiple
+domains, we only consider the source domain $D=s$ and target $D=t$.
+In the covariate shift model, $\Pr[X|D=d]$ may vary with the domain
+$D$, while the conditional distribution $\Pr[Y|X,D=d]$ is not a
+function of the domain.  We consider a slight modification of this
+setting, under the prevalent assumption that we are working in a high
+enough dimensional feature space so that a certain linearity
+assumption is appropriate.  Formally, we have:
+
+\begin{assumption} \label{ass:same_task}
+(Identical Tasks) Assume there there is a vector $\betatrue$ so that
+for $d\in {s,t}$:
+\[
+\Expct [Y|X,D=d] = \betatrue \cdot X
+\]
+\end{assumption}
+
+%Roughly speaking, this assumption is an idealization of empirical
+%finding that there exists one good \emph{simultaneous} linear predict
+%for multiple domains (which we empirically is true).
+
+Now suppose we have a labeled training data $T=\{(x,y)\}$ on the
+source domain $s$, and we desire to perform well on our target
+domain $t$. Let us examine what is transferred by using the naive
+algorithm of simply minimizing the square loss on the source domain.
+
+Roughly speaking, using samples from the source domain
+$s$, we can estimate $\beta$ in only those directions in which $X$ varies
+on domain $s$. Let us define the subspaces in which the source 
+and target inputs vary. To make this precise, define the \emph{principal
+  subspace} $\PCAd$ for a domain $d$ as the (lowest dimensional)
+subspace of $\calX$ such that $X\in \PCAd$ with probability $1$.
+
+There are three natural subspaces between the source domain $s$ and
+target domain $t$; the part which is shared and the parts specific to
+each. More precisely, define the shared subspace for two domains $s$
+and $t$ as $\PCAshared = \PCAs \cap \PCAt$ (the intersection of the
+principal subspaces, which is itself a subspace). We can decompose any
+vector $x$ into the vector $x=[x]_{s,t}+ [x]_{s,\perp}+
+[x]_{t,\perp}$, where the latter two vectors are the projections of
+$x$ which lie off the shared subspace (Our use of the ``$\perp$''
+notation is justified since one can choose an inner product space
+where these components are orthogonal, though our analysis does not
+explicitly assume any inner product space on $\calX$).  We can view the
+naive algorithm as fitting three components, $[w]_{s,t}$,
+$[w]_{s,\perp}$, and $[w]_{t,\perp}$, where the prediction is of the
+form:
+\[
+[w]_{s,t} \cdot [x]_{s,t}+[w]_{s,\perp} \cdot [x]_{s,\perp}+ [w]_{t,\perp}\cdot [x]_{t,\perp}
+\]
+Here, with only source data, this would result in an unspecified estimate of
+$[w]_{t,\perp}$ as $[x]_{t,\perp}=0$ for $x \in \PCAs$. Furthermore, the naive algorithm would only learn 
+weights on $[x]_{s,t}$ (and it is this weight, on what is shared,
+which is what transfers to the target domain).
+
+Certainly, without further assumptions, we would not expect to be able
+to learn how to utilize $[x]_{t,\perp}$ with only training data from
+the source. However, as discussed in the intro, we might hope that
+with unlabeled data, we would be able to ``couple''  the learning of
+features in $[x]_{t,\perp}$ to those on $[x]_{s,t}$. 
+
+\subsection{Unsupervised Learning and Dimensionality Reduction}
+
+Our second assumption specifies a means by which this coupling may
+occur. Given a domain $d$, there are a number of semi-supervised
+methods which seek to find a projection to a subspace $\PCAd$, which
+loses little predictive information about the target. In fact, much of
+the focus on un-(and semi-)supervised dimensionality reduction is on
+finding projections of the input space which lose little predictive
+power about the target. We idealize this with the following
+assumption.
+
+\begin{assumption} \label{ass:dim_red} (Dimensionality Reduction) For
+  $d\in\{s,t\}$, assume there is a projection
+  operator~\footnote{Recall, that $M$ is a projection operator if $M$
+    is a linear and if $M$ is idempotent, i.e.  $M^2x=Mx$} $\Projd$
+  and a vector $\betad$ such that
+\[
+\Expct [Y|X,D=d] = \betad \cdot (\Projd X) \, .
+\]
+Furthermore, as $\Projt$ need only be specified on $\PCAt$ for this assumption, we can
+specify the target projection operator so that $\Projt \xsp = 0$ (for convenience).
+\end{assumption}
+
+Implicitly, we assume that $\Projs$ and $\Projt$ can be learned from
+unlabeled data, and being able to do so is is crucial to the practical
+success of our adaptation algorithm.  Our theory is agnostic to the
+details of the specific learning algorithm, though.  Indeed, the
+empirical adaptation work that does learn shared representations
+covers a whole host of techniques, all of which work well for their
+particular task~\cite{blitzer06,guo09,huangyates}.  We discuss our
+specific algorithm in further detail in
+Section~\ref{subsec:learning_projections}.

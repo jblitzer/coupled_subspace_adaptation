@@ -1,0 +1,152 @@
+\section{Generalization under the Coupled Representation}
+\label{sec:generalization}
+
+The idea of the algorithm is to construct a shared representation so
+that learning on the source will force learning on the novel part of
+the target subspace, e.g. on $[x]_{t,\perp}$. Our algorithm fits a
+linear predictor of the form:
+\begin{equation}~\label{eq:coupled}
+w_t \Projt x  \ + \  w_s \Projs \xsp
+\end{equation}
+where $w_t$ and $w_s$ are the parameters.  
+
+First, the following lemma shows that this representation is
+\emph{sound}, meaning that our shared representation supports optimal
+predictions \emph{simultaneously} on both the source and target
+domains, with $w_t=\betat$ and $w_s=\betas$.
+
+\begin{lemma}~\label{lemma:coupled}
+(Soundness) For $d =s$ and $d=t$, we have that:
+\[
+\Expct[Y|X,D=d] = \betat \Projt x  \ + \  \betas \Projs \xsp
+\]
+\end{lemma}
+
+\begin{proof}
+First, by our projection assumption,
+the optimal predictors are:
+\begin{eqnarray*}
+\Expct[Y|X,D=s] = \betas \Projs \xst  \ + \ & \betas \Projs \xsp& \ + \ 0 \\
+\Expct[Y|X,D=t] = \betat \Projt \xst  \ + \  & 0 & \ + \  \betat \Projt \xtp
+\end{eqnarray*}
+Now, in our domain adaptation setting
+(where $E[Y|X,D=d]$ is linear in $X$), we have must have that the
+weights on $x_{s,t}$ agree, so that:
+\[
+\betas \Projs \xst = \betat \Projt \xst
+\]
+for all $x$.
+
+For $d=t$, the above clearly holds as $\xsp=0$ for $x \in \PCAt$. For
+$d=s$, we have $\Projt x = \Projt \xst +\Projt \xsp = \Projt
+\xst$ for $x \in \PCAs$, since $\Projt$ is null on $\xsp$ (as
+discussed in Assumption~\ref{ass:dim_red}).
+\end{proof}
+
+Now, let us provide a little intuition for this representation, before
+formally showing how perfect transfer is possible using only
+source data. Note that for our source domain, where $x \in \PCAs$, we
+have that $\Projt x = \Projt \xst$ (since $\Projt \xsp =0$, as
+explained in Assumption~\ref{ass:dim_red}). Hence, our prediction with
+$x$ in the source is of the form:
+\[
+w_t \Projt \xst  \ + \  w_s \Projs \xsp
+\]
+Thus, if we seek to use $\xst$ in our prediction, then we \emph{must}
+place a non-zero weight on at least some components in $w_t$. However,
+now the learned weight $w_t$ could have an effect on all of $\xtp$.
+
+\iffalse
+First
+note, that $w_t$ is a weight acting on $\Projt x$, and this projection
+couples the features in $\xst$ with $\xtp$ --- so that with a nonzero weight
+$w_t$, our predictions could vary with $\xtp$.
+\fi
+
+Our first theorem specifies when perfect transfer is possible using
+only source data (e.g. do we converge to a perfect predictor on the
+target domain with a sufficiently large sample on the source
+domain). Using the notation, $\Projt \PCAt=\{\Projt x: x\in\PCAt\}$,
+we have that $\Projt \PCAt$ is the reduced
+dimensional predictive subspace for the target domain. Also, note that
+$\Projt \PCAshared$ is the subspace of $\Projt \PCAt$ which is due
+to the variation in the shared subspace. Note that $\Projt \PCAshared$ could
+actually equal $\Projt \PCAt$. For example, say  $\Projt X$
+is simply the one dimensional projection $3X_1+5X_3$, where both $X_1$ and $X_3$ are in $\PCAt$. Now
+note that we only need to vary$X_1$ (or just $X_3$ or any
+one-dimensional linear combination of them) to cause $3X_1+5X_3$ to
+vary. In other words, roughly speaking, as long as the shared features
+are appropriately coupled to new features (through $\Projt$)), we will have that $\Projt
+\PCAshared = \Projt \PCAt$.
+
+\begin{theorem}
+\label{thm:perfect}
+(Perfect Transfer) Suppose $\Projt
+\PCAshared = \Projt \PCAt$. Then any weight
+  vector $(w_t,w_s)$ on the coupled representation which is optimal on
+  the source, is also optimal on the target.
+\end{theorem}
+
+\begin{proof}
+  If $(w_t,w_s)$ provides an optimal prediction on $s$, then this
+  uniquely (and correctly) specifies the linear map on
+  $\PCAshared$. Hence, $w_t$ is such that $w_t \Projt \xst $ is
+  correct for all $x$, e.g. $w_t \Projt \xst = \beta \xst$ (where
+  $\beta$ is as defined in Assumption~\ref{ass:same_task}). This
+  implies that $w_t$ has been correctly specified in
+  $\textrm{dim}(\Projt \PCAshared)$ directions. By assumption, this
+  implies that all directions for $w_t$ have been specified, as $\Projt \PCAshared=\Projt \PCAt$
+\end{proof}
+
+Our next theorem is on generalization, when we have a finite training
+dataset (which could consist of only source samples or a mix of
+samples from the source and target). For the theorem, we condition on
+the inputs $x$ in our training set (e.g. we work in a fixed design
+setting), and denote these by $T_{\textrm{training}}$ (of size
+$n$). As in the fixed design setting, the randomization is only over
+the $Y$ values for these fixed inputs.  Define the following two
+covariance matrices:
+\[
+\Covt = \E[ \ (\Projt x)(\Projt x)^\top |D=t] , \ \ 
+\Covstot = \frac{1}{n} \sum_{x\in T_s} (\Projt x)(\Projt x)^\top
+\]
+Roughly speaking, $\Covstot$ specifies how the training inputs vary in 
+the relevant target directions.
+
+\begin{theorem}~\label{thm:gen} (Generalization) Assume that
+  $\mathrm{Var}(Y|X)\leq 1$.  Let: our coordinate system be such that
+  $\Covt=I$; $\calL_t(w)$ be the square loss on the target domain; and
+  $(\hat w_t,\hat w_s)$ be the empirical risk minimizer with a
+  training sample of size $n$. Then our expected regret is:
+\[
+E[\calL_t(\hat w_t,\hat w_s)] - \calL_t(\beta_t,\beta_s) \leq \frac{\sum_i \frac{1}{\lambda_i}}{n}
+\]
+where $\lambda_i$ are the eigenvalues of $\Covstot$ and the
+expectation is with respect to random samples of $Y$ on the fixed
+training inputs.
+\end{theorem}
+
+The proof is in Appendix~\ref{app:proof}.  For the above bound to be
+meaningful we need the eigenvalues to be nonzero --- this amounts to
+having variance in all the directions in $\Projt \PCAt$ (as this is
+subspace corresponding to target error covariance matrix
+$\Covt$). Note that some target data could greatly reduce the inverse
+eigenvalues eigenvalues, thus providing for better generalization.
+
+We briefly compare our bound to the adaptation generalization results
+of Ben-David et al.~\cite{ben-david07} and Mansour et
+al.~\cite{mansour09colt}.  The bounds they provide bounds factor as an
+approximation term that goes to 0 as the amount of source data goes to
+infinity and a bias term that depends on the divergence between the
+two distributions.  If perfect transfer (Theorem~\ref{thm:perfect}) is
+possible, then our bound will converge to 0 without bias.  Note that
+Theorem~\ref{thm:perfect} can hold even when there is large divergence
+between the source and target domains, as measured by Ben-David et
+al.~\cite{ben-david07} and Mansour et al.~\cite{mansour09colt}.  On
+the other hand, there may be situations where for finite source
+samples our bound is much larger due to small eigenvalues of
+$\Covstot$.  Finally we note that if some eigenvalues are $0$ (i.e. we
+are missing some relevant directions), then it is possible to include
+a bias term for our bound (as a function of $\beta_t$), though due to
+space constraints, this is not provided.
+

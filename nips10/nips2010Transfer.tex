@@ -1,0 +1,87 @@
+\documentclass{article}
+\usepackage{nips10submit_e,times}
+
+\usepackage{wrapfig}
+\usepackage{graphicx}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{natbib}
+\usepackage{url}
+\usepackage{color}
+
+\include{notation}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{assumption}[theorem]{Assumption}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{example}{Example}
+\newtheorem{remark}{Remark}
+
+\title{Domain Adaptation with Coupled Subspaces}
+
+\author{
+John Blitzer \\
+Department of Electrical Engineering and Computer Science\\
+University of California, Berkeley\\
+Berkeley, CA 94709 \\
+\texttt{blitzer@cs.berkeley.edu}\\
+\And
+Dean Foster and Sham Kakade \\
+Department of Statistics \\
+University of Pennsylvania \\
+\texttt{sham@stat.upenn.edu} \\
+}
+
+% The \author macro works with any number of authors. There are two commands
+% used to separate the names and addresses of multiple authors: \And and \AND.
+%
+% Using \And between authors leaves it to \LaTeX{} to determine where to break
+% the lines. Using \AND forces a linebreak at that point. So, if \LaTeX{}
+% puts 3 of 4 authors names on the first line, and the last on the second
+% line, try using \AND instead of \And before the third author name.
+
+\newcommand{\fix}{\marginpar{FIX}}
+\newcommand{\new}{\marginpar{NEW}}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+  Domain adaptation algorithms address a key issue in applied machine
+  learning: How can we train a system under a \emph{source}
+  distribution but achieve high performance under a different
+  \emph{target} distribution?  We tackle this question for divergent
+  distributions where crucial predictive target features may not even
+  have support under the source distribution.  The key intuition we
+  formalize is how to link the learning of weights for these
+  target-specific features to source features via a coupled subspace.
+  We formalize the assumptions under which such coupled learning is
+  possible and give finite sample target error bounds (using only
+  source training data).  Our algorithm yields good performance on two
+  natural language processing adaptation data sets which are
+  characterized by the presence of novel features.
+\end{abstract}
+
+\input{intro}
+
+\input{setting}
+
+%% \input{algorithm}
+
+\input{theory}
+
+\input{experiments}
+
+\input{conclusion}
+
+\bibliographystyle{plain}
+\bibliography{nips2010Transfer}
+
+\newpage
+%\pagebreak
+\appendix
+\input{appendix}
+
+\end{document}

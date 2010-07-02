@@ -1,0 +1,137 @@
+\section{Introduction}
+\label{sec:intro}
+% don't use words: alig, zero-shot algo
+
+The supervised learning paradigm of training and testing on identical
+distributions has provided a powerful abstraction for developing and
+analyzing learning algorithms.  In many natural applications, though,
+we train our algorithm on a source distribution, but we desire high
+performance on target distributions which differ from that
+source~\cite{huang07,xue08,blitzer08,mansour09}.  This is the
+problem of domain adaptation, which plays a central role in fields
+such as speech recognition~\cite{legetter95}, computational
+biology~\cite{liu08}, natural language
+processing~\cite{blitzer06,daume07,guo09}, and web
+search~\cite{chen08,gao09}.\footnote{Jiang~\cite{JiangReview} provides
+  a good overview of domain adaptation settings and models}
+
+In this paper, we address a domain adaptation setting that is common
+in the natural language processing literature.  Our target domain
+contains crucial predictive features such as words or phrases that do
+not have support under the source distribution.
+Figure~\ref{fig:examples} shows two tasks which exemplify this
+condition.  The left-hand side is an example of a product review
+classification task~\cite{blitzer07,dredze08,mansour09}.  The
+instances in this task consist of reviews of different different
+products from Amazon.com, together with the rating given to the
+product by the reviewer (1-5 stars).  The adaptation task is to build
+a regression model (for number of stars) from reviews of one product
+type and apply it to another.  In the example shown, the target domain
+(kitchen appliances) contains phrases like \emph{a breeze} which are
+positive predictors but not present at all in the source domain.
+
+The right-hand side of Figure~\ref{fig:examples} is an example of a
+part of speech (PoS) tagging
+task~\cite{ratnaparkhi96,blitzer06,huangyates}.  The instances consist
+of words and their left and right contexts, together with their tags
+(noun, verb, adjective, adverb, etc).\footnote{PoS tagging is often
+  treated as a sequence-modeling task, but the error is measured on a
+  per-token basis} The adaptation task is to build a tagging model
+from annotated Wall Street Journal (WSJ) text and apply it to text of
+another genre, such as biomedical abstracts (BIO).  In the example
+shown, BIO text contains words like \emph{opioid} that we'd like to
+assign tags to, but which are not present in the WSJ.
+
+While at first glance this may seem impossible, there is a body of
+empirical work achieving good performance in this setting, by coupling
+the learning of these novel features to those features which are
+shared across domains~\cite{blitzer06,guo09,huangyates}. For example,
+in the sentiment data set, the phrase \emph{a breeze} may co-occur
+with the words \emph{excellent} and \emph{good} and the phrase
+\emph{highly recommended}.  Since these words are also used to express
+positive sentiment about books, we can build a representation from
+unlabeled target data which couples the weight for \emph{a breeze}
+with the weights for these features.
+
+
+In this work, we formalize assumptions that provably permit the design
+of algorithms for domain adaptation, which: 1) allow for transferring
+an accurate classifier from our source domain to an accurate
+classifier on the target domain and 2) are capable of using novel
+features from the target domain.  Based on these assumptions, we give
+a simple algorithm that builds a coupled linear subspace from
+unlabeled (source and target) data.  We also give finite target error
+bounds (using only source training data or a mix of source and target
+training data) that depend on how the covariance structure of the
+coupled subspace relates to novel features in the target distribution
+(which we precisely specify).
+
+\iffalse
+Our goal in this work is to formalize the assumptions under which
+learning a representation from unlabeled data can allow us to build a
+model on the source domain that automatically performs well on the
+target.  Bases on these assumptions, we give a simple algorithm that
+builds a shared linear subspace from unlabeled source and target data.
+We also give finite source-sample target error bounds for our
+algorithm that depend on the covariance structure of the shared
+subspace under the source and target distributions.  
+subspace under the source and target distributions.  Our bound is
+similar in spirit to both sample selection bias correction
+work~\cite{heckman79,huang07,cortes08} as well as theoretical analyses
+of domain adaptation~\cite{blitzer08,mansour09}.  It differs from the
+former by accomadating source and target distributions which don't
+share support and from the latter by giving rates which asymptotically
+approach 0, even when the distributions diverge on the shared
+subspace.
+\fi
+
+Our work differs from previous treatment of the domain adaptation
+setting~\cite{JiangReview} in that we focus on the issue of how to
+make use of novel features in the target domain.  Our bound is similar
+in spirit to both sample selection bias correction
+work~\cite{heckman79,huang07,cortes08} and recent theoretical analyses
+of domain adaptation~\cite{blitzer08,mansour09}.  It differs from the
+former by accommodating source and target distributions which don't
+share support and from the latter by giving rates which asymptotically
+approach 0, even when the distributions diverge on the coupled
+subspace.
+
+We demonstrate the performance of our algorithm on the sentiment
+classification and part of speech tagging tasks illustrated in
+Figure~\ref{fig:examples}.  Our algorithm gives consistent performance
+improvements from learning a model on source labeled data and testing
+on a different target distribution.  Incorporating small amounts of
+target data is trivial under our model, since our representation
+automatically incorporates target data along those directions of the
+shared subspace where it is needed most.
+% We demonstrate improved performance in this setting, as well.
+
+\begin{figure*}
+\begin{center}
+\begin{tabular}{rlccccc}
+           \multicolumn{2}{c}{\large{Sentiment Classification}} & & \multicolumn{4}{c}{\large{Part of Speech Tagging}}\\
+\hline 
+\\
+\multicolumn{2}{c}{\textbf{\textcolor{blue}{Books}}} &  \quad \quad \quad & \multicolumn{4}{c}{\textbf{\textcolor{blue}{Financial News}}} \\
+\vspace{-0.1in}\\
+Positive: & \emph{packed with \textcolor{blue}{fascinating} info} & & NN & VB & VB & NN\\
+Negative: & \emph{\textcolor{blue}{plot} is very \textcolor{blue}{predictable}} & & \emph{funds} & \emph{are} & \emph{attracting} & \emph{\textcolor{blue}{investors}}\\
+\\
+\multicolumn{2}{c}{\textbf{\textcolor{red}{Kitchen Appliances}}} &  & \multicolumn{4}{c}{\textbf{\textcolor{red}{Biomedical Abstracts}}} \\
+\vspace{-0.1in}\\
+Positive: & {\emph{\textcolor{red}{a breeze} to clean up}} & & NN & PP & ADJ & NN\\
+Negative: & \emph{\textcolor{red}{leaking} on my \textcolor{red}{countertop}} & & \emph{expression} & \emph{of} & \emph{\textcolor{red}{opioid}} & \emph{\textcolor{red}{receptors}}\\
+\\
+\hline
+\end{tabular}
+\end{center}
+\label{fig:examples}
+\caption{Examples from two natural language processing adaptation
+  tasks, where the target distributions contain words (in red) that do
+  not have support under the source distribution.  Words colored in
+  blue and red are unique to the source and target domains,
+  respectively.  Sentiment classification is a binary (positive
+  vs. negative) classification problem.  Part of speech tagging is a
+  sequence labeling task, where NN indicates noun, PP indicates
+  preposition, VB indicates verb, etc.}
+\end{figure*}
